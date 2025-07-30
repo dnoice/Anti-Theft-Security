@@ -1,0 +1,1 @@
+Full-screen alarm interface
