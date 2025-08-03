@@ -1,1 +1,115 @@
-Color definitions
+<!-- File: app/src/main/res/values/colors.xml -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary app colors -->
+    <color name="primary_color">#2196F3</color>
+    <color name="primary_dark">#1976D2</color>
+    <color name="primary_light">#BBDEFB</color>
+    <color name="accent_color">#FF5722</color>
+    
+    <!-- Background colors -->
+    <color name="background_primary">#F5F5F5</color>
+    <color name="background_secondary">#FAFAFA</color>
+    <color name="card_background">#FFFFFF</color>
+    
+    <!-- Text colors -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_hint">#BDBDBD</color>
+    <color name="text_secondary_light">#B0BEC5</color>
+    <color name="text_hint_light">#78909C</color>
+    
+    <!-- Status colors -->
+    <color name="status_armed">#4CAF50</color>
+    <color name="status_disarmed">#FF9800</color>
+    <color name="status_alarm">#F44336</color>
+    <color name="status_warning">#FF9800</color>
+    
+    <!-- Security alert colors -->
+    <color name="security_danger">#D32F2F</color>
+    <color name="security_warning">#F57C00</color>
+    <color name="security_safe">#388E3C</color>
+    <color name="security_info">#1976D2</color>
+    
+    <!-- Alarm screen colors -->
+    <color name="alarm_background">#B71C1C</color>
+    <color name="alarm_flash">#FFEB3B</color>
+    <color name="alarm_card_background">#C62828</color>
+    <color name="pin_card_background">#424242</color>
+    <color name="status_bar_background">#8A000000</color>
+    <color name="emergency_background">#E65100</color>
+    
+    <!-- Button colors -->
+    <color name="button_arm">#4CAF50</color>
+    <color name="button_arm_pressed">#388E3C</color>
+    <color name="button_disarm">#F44336</color>
+    <color name="button_disarm_pressed">#D32F2F</color>
+    <color name="button_secondary">#607D8B</color>
+    <color name="button_secondary_pressed">#455A64</color>
+    <color name="button_snooze">#FF9800</color>
+    <color name="button_evidence">#2196F3</color>
+    <color name="button_emergency">#E91E63</color>
+    <color name="button_cancel_emergency">#795548</color>
+    
+    <!-- Evidence colors -->
+    <color name="evidence_active">#4CAF50</color>
+    <color name="evidence_complete">#2196F3</color>
+    <color name="evidence_error">#F44336</color>
+    
+    <!-- Selection colors -->
+    <color name="selection_active">#804CAF50</color>
+    <color name="selection_inactive">#40FFFFFF</color>
+    
+    <!-- Notification colors -->
+    <color name="notification_security">#D32F2F</color>
+    <color name="notification_info">#1976D2</color>
+    <color name="notification_warning">#F57C00</color>
+    
+    <!-- Error and success colors -->
+    <color name="error_color">#F44336</color>
+    <color name="success_color">#4CAF50</color>
+    <color name="warning_color">#FF9800</color>
+    <color name="info_color">#2196F3</color>
+    
+    <!-- Transparent colors -->
+    <color name="transparent">#00000000</color>
+    <color name="semi_transparent_black">#80000000</color>
+    <color name="semi_transparent_white">#80FFFFFF</color>
+    
+    <!-- Gradient colors -->
+    <color name="gradient_start">#1976D2</color>
+    <color name="gradient_end">#2196F3</color>
+    
+    <!-- Shield and security specific colors -->
+    <color name="shield_active">#4CAF50</color>
+    <color name="shield_inactive">#9E9E9E</color>
+    <color name="breach_detected">#FF1744</color>
+    
+    <!-- Dark theme colors (for future dark mode support) -->
+    <color name="dark_background">#121212</color>
+    <color name="dark_surface">#1E1E1E</color>
+    <color name="dark_text_primary">#FFFFFF</color>
+    <color name="dark_text_secondary">#B3FFFFFF</color>
+    
+    <!-- Material Design colors -->
+    <color name="material_red">#F44336</color>
+    <color name="material_pink">#E91E63</color>
+    <color name="material_purple">#9C27B0</color>
+    <color name="material_deep_purple">#673AB7</color>
+    <color name="material_indigo">#3F51B5</color>
+    <color name="material_blue">#2196F3</color>
+    <color name="material_light_blue">#03A9F4</color>
+    <color name="material_cyan">#00BCD4</color>
+    <color name="material_teal">#009688</color>
+    <color name="material_green">#4CAF50</color>
+    <color name="material_light_green">#8BC34A</color>
+    <color name="material_lime">#CDDC39</color>
+    <color name="material_yellow">#FFEB3B</color>
+    <color name="material_amber">#FFC107</color>
+    <color name="material_orange">#FF9800</color>
+    <color name="material_deep_orange">#FF5722</color>
+    <color name="material_brown">#795548</color>
+    <color name="material_grey">#9E9E9E</color>
+    <color name="material_blue_grey">#607D8B</color>
+</resources>
