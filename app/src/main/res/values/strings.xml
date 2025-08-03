@@ -1,1 +1,303 @@
-Text content
+<!-- File: app/src/main/res/values/strings.xml -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App name and basic info -->
+    <string name="app_name">Anti-Theft Security</string>
+    <string name="app_description">Advanced device protection with motion detection and evidence collection</string>
+    <string name="app_version">Version 1.0</string>
+    
+    <!-- Main Activity strings -->
+    <string name="security_status_armed">🛡️ ARMED</string>
+    <string name="security_status_disarmed">🔓 DISARMED</string>
+    <string name="security_status_alarm">🚨 ALARM</string>
+    
+    <string name="btn_arm">🛡️ ARM</string>
+    <string name="btn_disarm">🔓 DISARM</string>
+    <string name="btn_view_evidence">📁 Evidence</string>
+    <string name="btn_settings">⚙️ Settings</string>
+    
+    <!-- PIN and Security -->
+    <string name="pin_section_title">🔐 Security PIN</string>
+    <string name="pin_hint">Enter PIN (minimum 4 digits)</string>
+    <string name="pin_confirm_hint">Confirm PIN</string>
+    <string name="pin_invalid">Invalid PIN</string>
+    <string name="pin_too_short">PIN must be at least 4 digits</string>
+    <string name="pin_mismatch">PIN confirmation doesn\'t match</string>
+    <string name="pin_set_success">PIN set successfully</string>
+    <string name="pin_attempts_remaining">⚠️ Warning: %d attempts remaining</string>
+    <string name="pin_final_attempt">🚨 FINAL ATTEMPT - Device will lock permanently!</string>
+    <string name="pin_locked">🔒 TOO MANY ATTEMPTS - DEVICE LOCKED</string>
+    
+    <!-- Security Features -->
+    <string name="features_section_title">🔧 Security Features</string>
+    <string name="feature_motion_detection">📱 Motion Detection</string>
+    <string name="feature_camera_evidence">📷 Camera Evidence</string>
+    <string name="feature_break_in_detection">🔍 Break-in Detection</string>
+    <string name="feature_fake_home_screen">🏠 Fake Home Screen</string>
+    
+    <!-- Sensitivity Control -->
+    <string name="sensitivity_title">🎚️ Sensitivity: %s (%d%%)</string>
+    <string name="sensitivity_low">Low</string>
+    <string name="sensitivity_medium">Medium</string>
+    <string name="sensitivity_high">High</string>
+    <string name="sensitivity_very_low">Very Low</string>
+    <string name="sensitivity_very_high">Very High</string>
+    
+    <!-- Alarm Sound -->
+    <string name="alarm_sound_title">🔊 Alarm Sound</string>
+    <string name="alarm_sound_siren">Siren</string>
+    <string name="alarm_sound_beep">Beep</string>
+    <string name="alarm_sound_horn">Horn</string>
+    <string name="alarm_sound_bell">Bell</string>
+    
+    <!-- Statistics -->
+    <string name="stats_section_title">📊 Security Statistics</string>
+    <string name="stats_evidence_files">Evidence Files: %d</string>
+    <string name="stats_total_triggers">Total Triggers: %d</string>
+    <string name="stats_break_in_attempts">Break-in Attempts: %d</string>
+    <string name="stats_app_disguise">App Disguise: %s</string>
+    
+    <!-- Alarm Activity strings -->
+    <string name="alarm_title">🚨 SECURITY BREACH 🚨</string>
+    <string name="alarm_message_motion">UNAUTHORIZED DEVICE MOVEMENT DETECTED</string>
+    <string name="alarm_message_break_in">BREAK-IN ATTEMPT DETECTED</string>
+    <string name="alarm_message_camera">CAMERA TAMPERING DETECTED</string>
+    <string name="alarm_message_manual">MANUAL SECURITY ALERT ACTIVATED</string>
+    <string name="alarm_message_default">UNAUTHORIZED DEVICE ACCESS DETECTED</string>
+    
+    <string name="alarm_details_title">📋 Alert Details</string>
+    <string name="alarm_trigger_type">Trigger: %s</string>
+    <string name="alarm_trigger_time">Time: %s</string>
+    <string name="alarm_trigger_details">%s</string>
+    
+    <string name="alarm_pin_title">🔐 Enter PIN to Disarm</string>
+    <string name="alarm_pin_hint">Enter PIN</string>
+    <string name="btn_disarm_alarm">DISARM</string>
+    <string name="btn_snooze_alarm">SNOOZE</string>
+    <string name="btn_view_evidence_alarm">📷 VIEW EVIDENCE</string>
+    <string name="btn_emergency_call">📞 EMERGENCY</string>
+    
+    <string name="alarm_duration">⏱️ %s</string>
+    <string name="alarm_evidence_capturing">📷 Capturing...</string>
+    <string name="alarm_evidence_captured">📷 Evidence Collected</string>
+    
+    <!-- Emergency Mode -->
+    <string name="emergency_title">📞 EMERGENCY MODE</string>
+    <string name="emergency_message">Device location and evidence being sent to emergency contacts</string>
+    <string name="btn_cancel_emergency">CANCEL EMERGENCY</string>
+    
+    <!-- Evidence Gallery strings -->
+    <string name="evidence_gallery_title">Security Evidence</string>
+    <string name="evidence_count">Evidence Files: %d</string>
+    <string name="evidence_storage_used">Storage Used: %s</string>
+    <string name="evidence_no_files">No evidence files found</string>
+    <string name="evidence_no_files_subtitle">Evidence will appear here when security is triggered</string>
+    
+    <string name="btn_select_all">Select All</string>
+    <string name="btn_deselect_all">Deselect All</string>
+    <string name="btn_delete_selected">Delete (%d)</string>
+    <string name="btn_share_selected">Share (%d)</string>
+    <string name="btn_clear_all_evidence">Clear All</string>
+    
+    <string name="evidence_delete_confirm_title">Delete Evidence</string>
+    <string name="evidence_delete_confirm_message">Are you sure you want to delete %d evidence file(s)? This action cannot be undone.</string>
+    <string name="evidence_clear_all_confirm_title">Clear All Evidence</string>
+    <string name="evidence_clear_all_confirm_message">Are you sure you want to delete ALL evidence files? This will permanently remove %d files and cannot be undone.</string>
+    
+    <string name="evidence_deleted">%d files deleted</string>
+    <string name="evidence_all_cleared">All evidence cleared (%d files)</string>
+    <string name="evidence_share_subject">Security Evidence</string>
+    <string name="evidence_share_text">Security evidence files from Anti-Theft app</string>
+    
+    <!-- Evidence Settings strings -->
+    <string name="evidence_settings_title">Evidence Settings</string>
+    
+    <string name="evidence_types_section">Evidence Collection</string>
+    <string name="evidence_photo_title">📷 Photo Evidence</string>
+    <string name="evidence_photo_subtitle">Capture photos from front and back cameras</string>
+    <string name="evidence_video_title">📹 Video Evidence</string>
+    <string name="evidence_video_subtitle">Record short videos during security events</string>
+    <string name="evidence_screenshot_title">📱 Screenshot Evidence</string>
+    <string name="evidence_screenshot_subtitle">Capture screen contents during events</string>
+    
+    <string name="notifications_section">Notifications</string>
+    <string name="notification_auto_email_title">📧 Auto Email Alerts</string>
+    <string name="notification_auto_email_subtitle">Automatically email evidence to contacts</string>
+    <string name="notification_delayed_title">⏰ Delayed Notifications</string>
+    <string name="notification_delayed_subtitle">Wait until device unlock to send alerts</string>
+    <string name="notification_disguised_title">🎭 Disguised Notifications</string>
+    <string name="notification_disguised_subtitle">Show fake system notifications</string>
+    
+    <string name="storage_section">Storage Management</string>
+    <string name="retention_days_title">Evidence Retention: %d days</string>
+    <string name="email_delay_title">Email Delay: %s</string>
+    <string name="email_delay_immediate">Immediate</string>
+    <string name="email_delay_minutes">%d minutes</string>
+    <string name="email_delay_hours">%d hour%s</string>
+    <string name="email_delay_hours_minutes">%dh %dm</string>
+    
+    <string name="email_recipients_title">Email Recipients</string>
+    <string name="email_recipients_hint">Enter email addresses separated by commas</string>
+    
+    <string name="storage_used_title">Storage Used: %s</string>
+    <string name="evidence_stats">Evidence Files: %d\nSecurity Sessions: %d\nPhoto Evidence: %s\nVideo Evidence: %s\nScreenshot Evidence: %s</string>
+    
+    <string name="btn_test_capture">Test Capture</string>
+    <string name="btn_test_capture_running">Testing...</string>
+    <string name="btn_clear_evidence">Clear Evidence</string>
+    <string name="btn_export_settings">Export Settings</string>
+    <string name="btn_import_settings">Import Settings</string>
+    
+    <!-- Test and Actions -->
+    <string name="test_capture_started">Starting test evidence capture</string>
+    <string name="test_capture_completed">Test evidence capture completed</string>
+    <string name="evidence_settings_saved">Evidence settings saved</string>
+    
+    <!-- Video Warning -->
+    <string name="video_warning_title">Video Evidence Warning</string>
+    <string name="video_warning_message">Video evidence uses more storage space and battery. Recording may be noticeable to intruders. Continue?</string>
+    <string name="btn_enable">Enable</string>
+    <string name="btn_disable">Disable</string>
+    
+    <!-- Settings Export/Import -->
+    <string name="export_settings_title">Export Settings</string>
+    <string name="export_settings_message">Settings exported to clipboard. You can paste and save these settings.</string>
+    <string name="btn_copy_to_clipboard">Copy to Clipboard</string>
+    <string name="settings_copied">Settings copied to clipboard</string>
+    
+    <string name="import_settings_title">Import Settings</string>
+    <string name="import_settings_message">Paste your exported settings:</string>
+    <string name="import_settings_hint">Paste exported settings here...</string>
+    <string name="btn_import">Import</string>
+    <string name="settings_imported">Settings imported successfully</string>
+    <string name="settings_import_invalid">Invalid settings format</string>
+    
+    <!-- Service and Notification strings -->
+    <string name="motion_detection_service_title">🛡️ Anti-Theft Protection Active</string>
+    <string name="motion_detection_service_text">Motion detection is monitoring your device</string>
+    <string name="motion_detection_channel_name">Motion Detection Service</string>
+    <string name="motion_detection_channel_description">Shows when motion detection is active</string>
+    
+    <string name="security_alerts_channel_name">Security Alerts</string>
+    <string name="security_alerts_channel_description">Delayed security notifications</string>
+    <string name="system_updates_channel_name">System Updates</string>
+    <string name="system_updates_channel_description">System and app notifications</string>
+    
+    <!-- Disguised Notifications -->
+    <string name="disguised_title_system_update">System Update Available</string>
+    <string name="disguised_title_app_update">App Update Completed</string>
+    <string name="disguised_title_storage_optimization">Storage Optimization Complete</string>
+    <string name="disguised_title_battery_optimization">Battery Optimization Applied</string>
+    <string name="disguised_title_security_scan">Security Scan Complete</string>
+    
+    <string name="disguised_text_system">System performance improvements installed</string>
+    <string name="disguised_text_app">Latest features and improvements added</string>
+    <string name="disguised_text_storage">Storage space has been optimized</string>
+    <string name="disguised_text_battery">Battery usage has been optimized</string>
+    <string name="disguised_text_security">System security check completed</string>
+    
+    <!-- Permissions and Errors -->
+    <string name="permission_camera_title">Camera Permission</string>
+    <string name="permission_camera_message">Camera access is required for evidence collection</string>
+    <string name="permission_storage_title">Storage Permission</string>
+    <string name="permission_storage_message">Storage access is required to save evidence</string>
+    <string name="permission_microphone_title">Microphone Permission</string>
+    <string name="permission_microphone_message">Microphone access is required for video evidence</string>
+    
+    <string name="error_camera_unavailable">Camera not available</string>
+    <string name="error_camera_permissions">Camera permissions not granted</string>
+    <string name="error_storage_permissions">Storage permissions not granted</string>
+    <string name="error_capture_failed">Evidence capture failed</string>
+    <string name="error_no_cameras">No cameras found on device</string>
+    
+    <!-- Success Messages -->
+    <string name="success_system_armed">Security system ARMED</string>
+    <string name="success_system_disarmed">Security system DISARMED</string>
+    <string name="success_evidence_captured">Evidence captured successfully</string>
+    <string name="success_alarm_disarmed">✓ Security system disarmed</string>
+    
+    <!-- General Actions -->
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
+    <string name="btn_continue">Continue</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_done">Done</string>
+    <string name="btn_close">Close</string>
+    <string name="btn_retry">Retry</string>
+    <string name="btn_delete">Delete</string>
+    <string name="btn_share">Share</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_refresh">Refresh</string>
+    
+    <!-- File Types -->
+    <string name="file_type_photo">Photo</string>
+    <string name="file_type_video">Video</string>
+    <string name="file_type_screenshot">Screenshot</string>
+    <string name="file_type_other">File</string>
+    
+    <!-- Time Formats -->
+    <string name="time_seconds_ago">%d seconds ago</string>
+    <string name="time_minutes_ago">%d minutes ago</string>
+    <string name="time_hours_ago">%d hours ago</string>
+    <string name="time_days_ago">%d days ago</string>
+    <string name="time_just_now">Just now</string>
+    
+    <!-- File Sizes -->
+    <string name="file_size_bytes">%d B</string>
+    <string name="file_size_kb">%.1f KB</string>
+    <string name="file_size_mb">%.1f MB</string>
+    <string name="file_size_gb">%.1f GB</string>
+    
+    <!-- Device Info -->
+    <string name="device_model">Model: %s</string>
+    <string name="device_android_version">Android: %s</string>
+    <string name="device_app_version">App: %s</string>
+    
+    <!-- Security Messages -->
+    <string name="security_first_run_welcome">Welcome! Please set a PIN to secure your device.</string>
+    <string name="security_permissions_required">Some permissions are required for full functionality</string>
+    <string name="security_all_permissions_granted">All permissions granted!</string>
+    <string name="security_some_features_disabled">Some features may not work without required permissions</string>
+    
+    <!-- Toasts and Short Messages -->
+    <string name="toast_enter_pin_to_disarm">Enter PIN to disarm alarm</string>
+    <string name="toast_volume_controls_disabled">Volume controls disabled during alarm</string>
+    <string name="toast_disarm_first">Please disarm the security system first</string>
+    <string name="toast_emergency_activated">Emergency mode activated - sending alerts</string>
+    <string name="toast_emergency_cancelled">Emergency mode cancelled</string>
+    <string name="toast_snooze_ended">Snooze ended - alarm reactivated</string>
+    <string name="toast_no_recent_apps">No recent apps</string>
+    
+    <!-- Menu Items -->
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_cleanup">Cleanup</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_about">About</string>
+    
+    <!-- Cleanup Dialog -->
+    <string name="cleanup_title">Cleanup Evidence</string>
+    <string name="cleanup_message">Remove evidence files older than:</string>
+    <string name="cleanup_7_days">7 Days</string>
+    <string name="cleanup_30_days">30 Days</string>
+    <string name="cleanup_completed">Cleaned up %d old files</string>
+    
+    <!-- Content Descriptions for Accessibility -->
+    <string name="content_desc_security_shield">Security Shield</string>
+    <string name="content_desc_warning_icon">Security Warning</string>
+    <string name="content_desc_app_icon">App Icon</string>
+    <string name="content_desc_evidence_photo">Evidence Photo</string>
+    <string name="content_desc_file_type_icon">File Type Icon</string>
+    
+    <!-- App Disguise -->
+    <string name="disguise_none">Anti-Theft Security</string>
+    <string name="disguise_file_manager">File Manager</string>
+    <string name="disguise_calculator">Calculator</string>
+    <string name="disguise_notes">Notes</string>
+    <string name="disguise_weather">Weather</string>
+    <string name="disguise_flashlight">Flashlight</string>
+</resources>
