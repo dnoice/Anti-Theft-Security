@@ -1,0 +1,419 @@
+# File: .github/workflows/android-build.yml
+
+name: 🤖 Android CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop, feature/* ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: true
+        default: 'debug'
+        type: choice
+        options:
+        - debug
+        - release
+      upload_to_releases:
+        description: 'Upload APK to releases'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  # App configuration
+  APP_NAME: "AntiTheftSecurity"
+  PACKAGE_NAME: "com.antitheft.security"
+  
+  # Build configuration
+  JAVA_VERSION: '17'
+  ANDROID_COMPILE_SDK: '34'
+  ANDROID_BUILD_TOOLS: '34.0.0'
+  ANDROID_NDK_VERSION: '25.1.8937393'
+
+jobs:
+  # ================================================
+  # CODE QUALITY & SECURITY CHECKS
+  # ================================================
+  code-quality:
+    name: 🔍 Code Quality & Security
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Full history for better analysis
+        
+    - name: 🔧 Setup Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ env.JAVA_VERSION }}
+        distribution: 'temurin'
+        
+    - name: 📱 Setup Android SDK
+      uses: android-actions/setup-android@v3
+      
+    - name: 🎯 Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: 📊 Run lint checks
+      run: ./gradlew lint
+      
+    - name: 🛡️ Security scan with CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: java
+        
+    - name: 🛡️ Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      
+    - name: 📋 Upload lint results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: lint-results
+        path: app/build/reports/lint-results*.html
+        retention-days: 30
+
+  # ================================================
+  # ANDROID BUILD MATRIX
+  # ================================================
+  build:
+    name: 🏗️ Build Android APK
+    needs: code-quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        build-type: [debug, release]
+        api-level: [21, 30, 34]
+        include:
+          - build-type: debug
+            artifact-name: "debug"
+            sign: false
+          - build-type: release
+            artifact-name: "release"
+            sign: true
+            
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: 🔧 Setup Java ${{ env.JAVA_VERSION }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ env.JAVA_VERSION }}
+        distribution: 'temurin'
+        
+    - name: 📱 Setup Android SDK
+      uses: android-actions/setup-android@v3
+      
+    - name: 🎯 Setup Android NDK
+      uses: nttld/setup-ndk@v1
+      with:
+        ndk-version: ${{ env.ANDROID_NDK_VERSION }}
+        
+    - name: 📦 Cache Gradle dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+          ~/.android/build-cache
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+          
+    - name: 🎯 Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: 🔍 Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@v2
+      
+    # ================================================
+    # ENVIRONMENT SETUP
+    # ================================================
+    - name: 🌟 Setup build environment
+      run: |
+        echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+        echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
+        echo "Build type: ${{ matrix.build-type }}"
+        echo "API level: ${{ matrix.api-level }}"
+        echo "Java version: ${{ env.JAVA_VERSION }}"
+        
+    - name: 📊 Display build info
+      run: |
+        echo "🏗️ Build Information"
+        echo "===================="
+        echo "App Name: ${{ env.APP_NAME }}"
+        echo "Package: ${{ env.PACKAGE_NAME }}"
+        echo "Build Type: ${{ matrix.build-type }}"
+        echo "API Level: ${{ matrix.api-level }}"
+        echo "Runner OS: ${{ runner.os }}"
+        echo "Java Version: ${{ env.JAVA_VERSION }}"
+        echo "Gradle Version: $(./gradlew --version | grep Gradle)"
+        
+    # ================================================
+    # KEYSTORE SETUP FOR RELEASE BUILDS
+    # ================================================
+    - name: 🔐 Setup release keystore
+      if: matrix.build-type == 'release'
+      env:
+        KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      run: |
+        if [ -n "$KEYSTORE_BASE64" ]; then
+          echo "Setting up release keystore..."
+          echo $KEYSTORE_BASE64 | base64 --decode > app/release-key.keystore
+          echo "storeFile=release-key.keystore" >> keystore.properties
+          echo "storePassword=$KEYSTORE_PASSWORD" >> keystore.properties
+          echo "keyAlias=$KEY_ALIAS" >> keystore.properties
+          echo "keyPassword=$KEY_PASSWORD" >> keystore.properties
+        else
+          echo "⚠️ No keystore secrets found - will create debug signed APK"
+        fi
+        
+    # ================================================
+    # BUILD PROCESS
+    # ================================================
+    - name: 🧹 Clean project
+      run: ./gradlew clean
+      
+    - name: 🔨 Build ${{ matrix.build-type }} APK
+      env:
+        BUILD_TYPE: ${{ matrix.build-type }}
+      run: |
+        if [ "$BUILD_TYPE" = "release" ]; then
+          echo "🚀 Building RELEASE APK..."
+          ./gradlew assembleRelease --stacktrace --info
+        else
+          echo "🔨 Building DEBUG APK..."
+          ./gradlew assembleDebug --stacktrace --info
+        fi
+        
+    - name: 🧪 Run unit tests
+      run: ./gradlew test${{ matrix.build-type == 'release' && 'Release' || 'Debug' }}UnitTest
+      continue-on-error: true
+      
+    - name: 📊 Generate test report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: 📋 Unit Tests (${{ matrix.build-type }})
+        path: app/build/test-results/test**/TEST-*.xml
+        reporter: java-junit
+        
+    # ================================================
+    # APK PROCESSING
+    # ================================================
+    - name: 🔍 Find APK files
+      id: find-apk
+      run: |
+        if [ "${{ matrix.build-type }}" = "release" ]; then
+          APK_PATH=$(find app/build/outputs/apk/release -name "*.apk" | head -1)
+        else
+          APK_PATH=$(find app/build/outputs/apk/debug -name "*.apk" | head -1)
+        fi
+        
+        if [ -f "$APK_PATH" ]; then
+          echo "✅ APK found: $APK_PATH"
+          echo "apk-path=$APK_PATH" >> $GITHUB_OUTPUT
+          
+          # Get APK info
+          APK_SIZE=$(stat -c%s "$APK_PATH")
+          APK_SIZE_MB=$(echo "scale=2; $APK_SIZE / 1024 / 1024" | bc)
+          echo "apk-size=$APK_SIZE_MB MB" >> $GITHUB_OUTPUT
+          
+          # Generate new filename
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          COMMIT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          NEW_NAME="${{ env.APP_NAME }}-${{ matrix.build-type }}-api${{ matrix.api-level }}-${COMMIT_SHA}-${TIMESTAMP}.apk"
+          echo "apk-name=$NEW_NAME" >> $GITHUB_OUTPUT
+        else
+          echo "❌ APK not found!"
+          exit 1
+        fi
+        
+    - name: 📊 APK Analysis
+      if: steps.find-apk.outputs.apk-path
+      run: |
+        APK_PATH="${{ steps.find-apk.outputs.apk-path }}"
+        echo "📱 APK Analysis Results"
+        echo "======================"
+        echo "File: $(basename $APK_PATH)"
+        echo "Size: ${{ steps.find-apk.outputs.apk-size }}"
+        echo "Path: $APK_PATH"
+        
+        # Check APK structure
+        if command -v aapt >/dev/null 2>&1; then
+          echo ""
+          echo "📋 APK Contents:"
+          aapt list $APK_PATH | head -10
+          echo ""
+          echo "🔍 APK Info:"
+          aapt dump badging $APK_PATH | grep -E "(package|application|launchable-activity)"
+        fi
+        
+    # ================================================
+    # ARTIFACT UPLOAD
+    # ================================================
+    - name: 📤 Upload APK artifact
+      uses: actions/upload-artifact@v4
+      if: steps.find-apk.outputs.apk-path
+      with:
+        name: ${{ env.APP_NAME }}-${{ matrix.artifact-name }}-api${{ matrix.api-level }}
+        path: ${{ steps.find-apk.outputs.apk-path }}
+        retention-days: 30
+        
+    - name: 📤 Upload mapping files (Release only)
+      uses: actions/upload-artifact@v4
+      if: matrix.build-type == 'release'
+      with:
+        name: mapping-files-${{ matrix.api-level }}
+        path: |
+          app/build/outputs/mapping/release/
+          app/build/outputs/native-debug-symbols/release/
+        retention-days: 90
+        
+    # ================================================
+    # BUILD SUMMARY
+    # ================================================
+    - name: 📋 Build Summary
+      if: always()
+      run: |
+        echo "## 🏗️ Build Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+        echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+        echo "| **App Name** | ${{ env.APP_NAME }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| **Build Type** | ${{ matrix.build-type }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| **API Level** | ${{ matrix.api-level }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| **APK Size** | ${{ steps.find-apk.outputs.apk-size || 'N/A' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| **Commit** | ${{ github.sha }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| **Branch** | ${{ github.ref_name }} |" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ steps.find-apk.outputs.apk-path }}" ]; then
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **APK built successfully!**" >> $GITHUB_STEP_SUMMARY
+          echo "📁 Artifact name: \`${{ steps.find-apk.outputs.apk-name }}\`" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "❌ **Build failed**" >> $GITHUB_STEP_SUMMARY
+        fi
+
+  # ================================================
+  # RELEASE AUTOMATION
+  # ================================================
+  release:
+    name: 🚀 Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.upload_to_releases == 'true'
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: 📤 Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts/
+        
+    - name: 🗂️ Organize release files
+      run: |
+        mkdir -p release-files
+        
+        # Find all APK files
+        find artifacts/ -name "*.apk" -exec cp {} release-files/ \;
+        
+        # List files for release
+        echo "📱 Files for release:"
+        ls -la release-files/
+        
+    - name: 📝 Generate release notes
+      id: release-notes
+      run: |
+        cat > release-notes.md << EOF
+        ## 🛡️ Anti-Theft Security App Release
+        
+        ### 📱 APK Downloads
+        - **Debug APK**: For testing and development
+        - **Release APK**: Signed production version
+        
+        ### 🔧 Build Information
+        - **Commit**: ${{ github.sha }}
+        - **Build Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+        - **API Levels**: 21, 30, 34
+        
+        ### 🚀 Features
+        - Motion-based security detection
+        - Multi-camera evidence collection
+        - Break-in detection and monitoring
+        - Smart notification system
+        - App disguising capabilities
+        - Fake home screen trap
+        
+        ### 📋 Installation
+        1. Download the appropriate APK
+        2. Enable "Unknown Sources" in Android settings
+        3. Install the APK
+        4. Grant required permissions
+        5. Set up your security PIN
+        
+        ### ⚠️ Important Notes
+        - Only install on devices you own
+        - Test motion detection on physical devices
+        - Configure email alerts in settings
+        - Review privacy settings before use
+        EOF
+        
+    - name: 🏷️ Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.ref_name || format('auto-{0}', github.run_number) }}
+        name: ${{ env.APP_NAME }} ${{ github.ref_name || format('Build #{0}', github.run_number) }}
+        body_path: release-notes.md
+        files: release-files/*
+        draft: false
+        prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'alpha') }}
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ================================================
+  # NOTIFICATION & CLEANUP
+  # ================================================
+  notify:
+    name: 📢 Notifications
+    needs: [build, release]
+    runs-on: ubuntu-latest
+    if: always() && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
+    
+    steps:
+    - name: 📧 Send build notification
+      if: env.SLACK_WEBHOOK_URL
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#android-builds'
+        username: 'GitHub Actions'
+        icon_emoji: ':robot_face:'
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+        text: |
+          ${{ env.APP_NAME }} build completed!
+          Status: ${{ needs.build.result }}
+          Release: ${{ needs.release.result }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
