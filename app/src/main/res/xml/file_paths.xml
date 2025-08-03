@@ -1,1 +1,46 @@
-FileProvider config
+<!-- File: app/src/main/res/xml/file_paths.xml -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <!-- External storage directory -->
+    <external-path 
+        name="external_files" 
+        path="." />
+    
+    <!-- App-specific external files directory -->
+    <external-files-path 
+        name="external_app_files" 
+        path="." />
+    
+    <!-- Security photos directory -->
+    <external-files-path 
+        name="security_photos" 
+        path="security_photos" />
+    
+    <!-- Security videos directory -->
+    <external-files-path 
+        name="security_videos" 
+        path="security_videos" />
+    
+    <!-- Security screenshots directory -->
+    <external-files-path 
+        name="security_screenshots" 
+        path="security_screenshots" />
+    
+    <!-- Cache directory -->
+    <external-cache-path 
+        name="external_cache" 
+        path="." />
+    
+    <!-- Internal storage -->
+    <files-path 
+        name="internal_files" 
+        path="." />
+    
+    <!-- Internal cache -->
+    <cache-path 
+        name="internal_cache" 
+        path="." />
+
+</paths>
