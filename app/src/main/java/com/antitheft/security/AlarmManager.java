@@ -13,6 +13,7 @@ import android.os.Vibrator;
 import android.os.VibratorManager;
 import android.util.Log;
 
+import android.content.res.AssetFileDescriptor;
 import java.io.IOException;
 
 public class AlarmManager {
@@ -98,32 +99,45 @@ public class AlarmManager {
             if (mediaPlayer != null) {
                 mediaPlayer.release();
             }
-            
+
             mediaPlayer = new MediaPlayer();
-            
+
             // Set audio attributes for alarm
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ALARM)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .build();
             mediaPlayer.setAudioAttributes(audioAttributes);
-            
+
             // Set data source based on selected sound
             int soundResource = getAlarmSoundResource();
-            mediaPlayer = MediaPlayer.create(context, soundResource);
-            
-            if (mediaPlayer != null) {
-                mediaPlayer.setLooping(true);
-                mediaPlayer.setVolume(alarmVolume / 100f, alarmVolume / 100f);
-                mediaPlayer.start();
-                
-                Log.i(TAG, "Alarm sound started: " + selectedAlarmSound);
-            } else {
-                Log.e(TAG, "Failed to create MediaPlayer for alarm sound");
+            AssetFileDescriptor afd = context.getResources().openRawResourceFd(soundResource);
+            if (afd == null) {
+                Log.e(TAG, "Failed to open alarm sound resource");
+                mediaPlayer.release();
+                mediaPlayer = null;
+                return;
             }
-            
+
+            try {
+                mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            } finally {
+                afd.close();
+            }
+
+            mediaPlayer.setLooping(true);
+            mediaPlayer.setVolume(alarmVolume / 100f, alarmVolume / 100f);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+
+            Log.i(TAG, "Alarm sound started: " + selectedAlarmSound);
+
         } catch (Exception e) {
             Log.e(TAG, "Error starting alarm sound", e);
+            if (mediaPlayer != null) {
+                mediaPlayer.release();
+                mediaPlayer = null;
+            }
         }
     }
     
